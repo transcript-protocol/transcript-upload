@@ -1,0 +1,14 @@
+{
+  "name": "extracttext",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "js-sha256": "^0.9.0",
+    "nodemon": "^1.18.1"
+  }
+}
