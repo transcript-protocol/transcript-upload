@@ -4,6 +4,7 @@
  7/11/18
 **/
 
+var hash = ""; // Should be accessable by extractForm but is undefined :( 
 
 /*
 Takes a pdf input and turns it into a url  
@@ -17,14 +18,14 @@ var fileElem = document.getElementById("fileElem"),
 function handleFiles(files) {
     console.log('FILES ', files);
     if (!files.length) {
-        fileList.innerHTML = "<p>No files selected!</p>";
+        fileList.innerHTML = "<h1>Choose Transcript</h1>";
     } else {
-        fileList.innerHTML = "";
+        fileList.innerHTML = "<h1>Upload Transcript Here</h1>";
         var list = document.createElement("ul");
         fileList.appendChild(list);
         for (var i = 0; i < files.length; i++) {
             var li = document.createElement("li");
-            list.appendChild(li);
+            // list.appendChild(li);
 
              
             var img = document.createElement("img"); 
@@ -33,31 +34,31 @@ function handleFiles(files) {
             img.onload = function() {
                 //window.URL.revokeObjectURL(this.src);
                  } 
-            li.appendChild(img); 
+            li.appendChild(prefix); 
             var info = document.createElement("span"); 
-            setText(`${files[i].name}: ${files[i].size} bytes ${img.src} text: `, info, li, img.src); 
+            hash = getHash(`${files[i].name}: ${files[i].size} bytes ${img.src} text: `, info, li, img.src) 
         } 
     }
 }
 
-/*
-Extracts the text from the pdf
-*/
-
-
-function setText(prefix, info, li, pdfUrl) {
+/**
+ * Returns the data
+ */
+function getHash(prefix, info, li, pdfUrl) {
     PDFJS.getDocument(pdfUrl)
         .then(pdf => pdf.getPage(1)) // pages start at 1
         .then(page => page.getTextContent())
         .then(joinTextData)
         .then(data => {
-            info.innerHTML = prefix + data;
-            li.appendChild(info)
+            console.log("Data: " + data)
+            console.log("Hash: " + hashText(data))
+            return hashText(data)
         })
         .catch(function(err) {
             console.log('Get Text Error: ', err)
         })
 }
+
 
 /*
 Parses the data from the shitshow of a datastructure
