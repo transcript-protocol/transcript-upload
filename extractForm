@@ -1,0 +1,24 @@
+/*
+Extracts info from form
+*/
+
+class Upload {
+    constructor(username, studentName, schoolID) {
+        // this.hash = hash
+        this.username = username
+        this.studentName = studentName
+        this.schoolID = schoolID
+    }
+}
+
+function createUpload(username, studentName, schoolID) {
+    return new Upload(username, studentName, schoolID)
+}
+
+function getInfo() {
+    var username = document.getElementById("username").value
+    var studentName = document.getElementById("studentName").value
+    var schoolID = document.getElementById("schoolId").value
+    var upload = createUpload(username, studentName, schoolID)
+    console.log(upload)
+}
