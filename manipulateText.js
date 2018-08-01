@@ -4,7 +4,7 @@
  7/11/18
 **/
 
-
+var hash = ""; // Should be accessable by extractForm but is undefined :( 
 
 /*
 Takes a pdf input and turns it into a url  
@@ -13,6 +13,7 @@ window.URL = window.URL || window.webkitURL;
 
 var fileElem = document.getElementById("fileElem"),
     fileList = document.getElementById("fileList");
+
 
 function handleFiles(files) {
     console.log('FILES ', files);
@@ -24,15 +25,18 @@ function handleFiles(files) {
         fileList.appendChild(list);
         for (var i = 0; i < files.length; i++) {
             var li = document.createElement("li");
+            // list.appendChild(li);
 
+             
             var img = document.createElement("img"); 
             img.src = window.URL.createObjectURL(files[i]); 
             img.height = 60; 
-
-
-            // var info = document.createElement("span"); 
-            var content = getContent(img.src)
-            console.log(content)
+            img.onload = function() {
+                //window.URL.revokeObjectURL(this.src);
+                 } 
+            li.appendChild(prefix); 
+            var info = document.createElement("span"); 
+            hash = getHash(`${files[i].name}: ${files[i].size} bytes ${img.src} text: `, info, li, img.src) 
         } 
     }
 }
@@ -40,15 +44,15 @@ function handleFiles(files) {
 /**
  * Returns the data
  */
-function getContent(pdfUrl) {
+function getHash(prefix, info, li, pdfUrl) {
     PDFJS.getDocument(pdfUrl)
         .then(pdf => pdf.getPage(1)) // pages start at 1
         .then(page => page.getTextContent())
         .then(joinTextData)
         .then(data => {
-            var pdfText = String(data)
-            console.log("PDF TEXT: " + pdfText)
-            return pdfText
+            console.log("Data: " + data)
+            console.log("Hash: " + hashText(data))
+            return hashText(data)
         })
         .catch(function(err) {
             console.log('Get Text Error: ', err)
@@ -74,8 +78,4 @@ Hashes the text
 function hashText(text) {
     var hashed = sha256(text)
     return hashed
-}
-
-function alert() {
-    console.log("Transcript Uploaded!")
 }
